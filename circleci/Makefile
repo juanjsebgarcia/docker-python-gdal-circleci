@@ -1,7 +1,8 @@
 GDAL_VERSION ?= 2.3.3
 PYTHON_VERSION ?= 3.7
-BASE_IMAGE ?= circleci/python:$(PYTHON_VERSION)
-IMAGE ?= rumbletravel/python-gdal-circle:py$(PYTHON_VERSION)-gdal$(GDAL_VERSION)
+BASE_SOURCE ?= circleci
+BASE_IMAGE ?= $(BASE_SOURCE)/python:$(PYTHON_VERSION)
+IMAGE ?= rumbletravel/python-gdal-circle:py$(PYTHON_VERSION)-gdal$(GDAL_VERSION)-base$(BASE_SOURCE)
 
 image:
 	docker build \
