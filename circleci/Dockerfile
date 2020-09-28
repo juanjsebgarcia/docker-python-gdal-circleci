@@ -1,11 +1,11 @@
-ARG BASE_IMAGE=circleci/python:3.7
+ARG BASE_IMAGE=circleci/python:3.8
 
 FROM ${BASE_IMAGE}
-FROM circleci/python:3.7
+FROM circleci/python:3.8
 MAINTAINER rumble.travel <juan@rumble.travel>
-# Version 1.0
+# Version 1.1
 
-ARG GDAL_VERSION=2.3.3
+ARG GDAL_VERSION=3.1.2
 
 # Fetch & install dependencies
 RUN sudo apt-get update

@@ -1,5 +1,5 @@
-GDAL_VERSION ?= 2.3.3
-PYTHON_VERSION ?= 3.7
+GDAL_VERSION ?= 3.1.2
+PYTHON_VERSION ?= 3.8
 BASE_SOURCE ?= circleci
 BASE_IMAGE ?= $(BASE_SOURCE)/python:$(PYTHON_VERSION)
 IMAGE ?= rumbletravel/python-gdal-circle:py$(PYTHON_VERSION)-gdal$(GDAL_VERSION)-base$(BASE_SOURCE)
