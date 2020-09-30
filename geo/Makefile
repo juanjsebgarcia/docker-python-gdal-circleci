@@ -2,15 +2,15 @@ GDAL_VERSION ?= 3.1.2
 GEOS_VERSION ?= 3.8.1
 PROJ_VERSION ?= 6.3.1
 
-BASE_PYTHON_VERSION ?= 3.8.5
+BASE_PYTHON_VERSION ?= 3.8.6
 BASE_SOURCE_SUFFIX ?= slim-buster
 BASE_IMAGE ?= python:$(BASE_PYTHON_VERSION)-$(BASE_SOURCE_SUFFIX)
 IMAGE ?= rumbletravel/python-geodjango:py-$(BASE_PYTHON_VERSION)--gdal-$(GDAL_VERSION)--base-$(BASE_SOURCE_SUFFIX)
 
-CI_PYTHON_VERSION ?= 3.8
+CI_PYTHON_VERSION ?= 3.8.6
 CI_BASE_SOURCE_SUFFIX ?= circleci
 CI_BASE_IMAGE ?= circleci/python:$(CI_PYTHON_VERSION)
-CI_IMAGE ?= rumbletravel/python-geo-circle:py-$(CI_PYTHON_VERSION)--gdal-$(GDAL_VERSION)--base-$(CI_BASE_SOURCE_SUFFIX)
+CI_IMAGE ?= rumbletravel/python-geo-circleci:py-$(CI_PYTHON_VERSION)--gdal-$(GDAL_VERSION)--base-$(CI_BASE_SOURCE_SUFFIX)
 
 image:
 	docker build \
