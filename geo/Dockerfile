@@ -71,9 +71,11 @@ RUN echo $(date --rfc-3339=seconds) > ./started_at \
     && rm -f /usr/local/lib/libgdal.a \
 # Cleanup packages from earlier install
     && apt-get purge -y --auto-remove ${BUILD_TOOLS} \
+# Delete apt-get results
+    && rm -rf /var/lib/apt/lists/* \
 #
 # Package newly modified files in /usr/local with symlinks
-    && tar --newer-mtime="$(cat ./started_at)" -zcvf usrlocal.tar.gz -C /usr/local .
+    && tar --ignore-failed-read --newer-mtime="$(cat ./started_at)" -zcvf usrlocal.tar.gz -C /usr/local .
 
 # Create a minimum viable runner for Production
 FROM ${BASE_IMAGE} as runner
