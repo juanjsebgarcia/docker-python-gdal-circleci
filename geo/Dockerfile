@@ -61,8 +61,6 @@ RUN echo $(date --rfc-3339=seconds) > ./started_at \
     && cd ../.. \
     && rm -r cache_gdal \
 #
-    && pip install --upgrade pip setuptools \
-#
 # libturbojpeg.so is not used by GDAL. Only libjpeg.so*
     && rm -f /usr/lib/libturbojpeg.so* \
 # Only libwebp.so is used by GDAL
@@ -70,9 +68,9 @@ RUN echo $(date --rfc-3339=seconds) > ./started_at \
 # Cleanup uneccesary libgdal
     && rm -f /usr/local/lib/libgdal.a \
 # Cleanup packages from earlier install
-    && apt-get purge -y --auto-remove ${BUILD_TOOLS} \
+#    && apt-get purge -y --auto-remove ${BUILD_TOOLS} \
 # Delete apt-get results
-    && rm -rf /var/lib/apt/lists/* \
+#    && rm -rf /var/lib/apt/lists/* \
 #
 # Package newly modified files in /usr/local with symlinks
     && tar --ignore-failed-read --newer-mtime="$(cat ./started_at)" -zcvf usrlocal.tar.gz -C /usr/local .; exit 0
