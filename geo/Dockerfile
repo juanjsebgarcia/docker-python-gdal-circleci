@@ -15,7 +15,7 @@ USER root
 # Fetch & install dependencies
 RUN echo $(date --rfc-3339=seconds) > ./started_at \
     && apt-get update \
-    && apt-get install -y --no-install-recommends ${BUILD_TOOLS} sqlite3 libsqlite3-dev \
+    && apt-get install -y --no-install-recommends ${BUILD_TOOLS} dpkg sqlite3 libsqlite3-dev tar tzdata \
 #
 # Install GEOS from source
     && mkdir cache_geos \
@@ -75,10 +75,12 @@ RUN echo $(date --rfc-3339=seconds) > ./started_at \
     && rm -rf /var/lib/apt/lists/* \
 #
 # Package newly modified files in /usr/local with symlinks
-    && tar --ignore-failed-read --newer-mtime="$(cat ./started_at)" -zcvf usrlocal.tar.gz -C /usr/local .
+    && tar --ignore-failed-read --newer-mtime="$(cat ./started_at)" -zcvf usrlocal.tar.gz -C /usr/local .; exit 0
 
 # Create a minimum viable runner for Production
 FROM ${BASE_IMAGE} as runner
+
+USER root
 
 COPY --from=builder /usrlocal.tar.gz /usrlocal.tar.gz
 
