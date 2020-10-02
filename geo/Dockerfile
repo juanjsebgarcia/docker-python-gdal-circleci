@@ -84,6 +84,7 @@ COPY --from=builder /usrlocal.tar.gz /usrlocal.tar.gz
 
 RUN tar -xvf /usrlocal.tar.gz -C /usr/local \
     && rm -rf /usrlocal.tar.gz
+    && pip install --upgrade pip setuptools
 
 ENV LD_LIBRARY_PATH="/lib:/usr/lib:/usr/local/lib:${LD_LIBRARY_PATH}"
 
