@@ -13,10 +13,11 @@ ARG BUILD_TOOLS="build-essential file pkg-config wget"
 USER root
 
 # Fetch & install dependencies
-RUN echo $(date --rfc-3339=seconds) > ./started_at \
-    && apt-get update \
+RUN apt-get update \
     && apt-get install -y --no-install-recommends ${BUILD_TOOLS} dpkg sqlite3 libsqlite3-dev tar tzdata \
-#
+# Set timestamp post deps install
+    && sleep 2 \
+    && echo $(date --rfc-3339=seconds) > ./started_at \
 # Install GEOS from source
     && mkdir cache_geos \
     && cd cache_geos \
