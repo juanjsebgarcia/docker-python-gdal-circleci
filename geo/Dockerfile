@@ -68,25 +68,39 @@ RUN apt-get update \
     && rm -f /usr/lib/libwebpmux.so* /usr/lib/libwebpdemux.so* /usr/lib/libwebpdecoder.so* \
 # Cleanup uneccesary libgdal
     && rm -f /usr/local/lib/libgdal.a \
-# Cleanup packages from earlier install
-#    && apt-get purge -y --auto-remove ${BUILD_TOOLS} \
-# Delete apt-get results
-#    && rm -rf /var/lib/apt/lists/* \
-#
+# UNTESTED: CLEAN UP OTHER .a files for GEOS PROJ
+    && rm -f /usr/local/lib/libgeos.a \
+    && rm -f /usr/local/lib/libproj.a \
 # Package newly modified files in /usr/local with symlinks
     && tar --ignore-failed-read --newer-mtime="$(cat ./started_at)" -zcvf usrlocal.tar.gz -C /usr/local .; exit 0
 
 # Create a minimum viable runner for Production
 FROM ${BASE_IMAGE} as runner
 
+ARG GDAL_VERSION
+
 USER root
-
-COPY --from=builder /usrlocal.tar.gz /usrlocal.tar.gz
-
-RUN tar -xvf /usrlocal.tar.gz -C /usr/local \
-    && rm -rf /usrlocal.tar.gz
-    && pip install --upgrade pip setuptools
 
 ENV LD_LIBRARY_PATH="/lib:/usr/lib:/usr/local/lib:${LD_LIBRARY_PATH}"
 
-CMD python3 -V && pip -V && gdalinfo --version && geos-config --version
+COPY gdal_install_tester.py /gdal_install_tester.py
+COPY --from=builder /usrlocal.tar.gz /usrlocal.tar.gz
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends build-essential \
+    && tar -xvf /usrlocal.tar.gz -C /usr/local \
+    && rm -f /usrlocal.tar.gz \
+    && pip install --upgrade pip setuptools GDAL==${GDAL_VERSION} \
+    && python /gdal_install_tester.py \
+    && rm -rf /var/lib/apt/lists/*
+
+CMD echo '-> Python:' \
+    && python3 -V \
+    && echo '-> pip:' \
+    && pip -V \
+    && echo '-> GDAL:' \
+    && gdalinfo --version \
+    && echo '-> GEOS:' \
+    && geos-config --version \
+    && echo '-> PROJ.4:' \
+    && /usr/local/bin/proj
