@@ -2,7 +2,7 @@ ARG BASE_IMAGE
 
 FROM ${BASE_IMAGE} as builder
 LABEL maintainer="rumble.travel <juan@rumble.travel>"
-# Version 1.3
+LABEL version="4"
 
 ARG GDAL_VERSION
 ARG GEOS_VERSION
