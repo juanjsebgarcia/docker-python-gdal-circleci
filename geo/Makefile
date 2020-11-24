@@ -1,6 +1,7 @@
-GDAL_VERSION ?= 3.1.3
+GDAL_VERSION ?= 3.1.4
 GEOS_VERSION ?= 3.8.1
-PROJ_VERSION ?= 6.3.1
+PROJ_VERSION ?= 6.3.2
+SPATIALITE_VERSION ?= 4.3.0a-5+b2
 
 BASE_PYTHON_VERSION ?= 3.8.6
 BASE_SOURCE_SUFFIX ?= slim-buster
@@ -18,6 +19,7 @@ image:
 		--build-arg GDAL_VERSION=$(GDAL_VERSION) \
 		--build-arg GEOS_VERSION=$(GEOS_VERSION) \
 		--build-arg PROJ_VERSION=$(PROJ_VERSION) \
+		--build-arg SPATIALITE_VERSION=$(SPATIALITE_VERSION) \
 		-t $(IMAGE) .
 
 image-ci:
@@ -26,6 +28,7 @@ image-ci:
 		--build-arg GDAL_VERSION=$(GDAL_VERSION) \
 		--build-arg GEOS_VERSION=$(GEOS_VERSION) \
 		--build-arg PROJ_VERSION=$(PROJ_VERSION) \
+		--build-arg SPATIALITE_VERSION=$(SPATIALITE_VERSION) \
 		-t $(CI_IMAGE) .
 
 test:

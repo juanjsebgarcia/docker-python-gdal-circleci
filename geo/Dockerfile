@@ -2,7 +2,7 @@ ARG BASE_IMAGE
 
 FROM ${BASE_IMAGE} as builder
 LABEL maintainer="rumble.travel <juan@rumble.travel>"
-LABEL version="4"
+LABEL version="5"
 
 ARG GDAL_VERSION
 ARG GEOS_VERSION
@@ -72,12 +72,13 @@ RUN apt-get update \
     && rm -f /usr/local/lib/libgeos.a \
     && rm -f /usr/local/lib/libproj.a \
 # Package newly modified files in /usr/local with symlinks
-    && tar --ignore-failed-read --newer-mtime="$(cat ./started_at)" -zcvf usrlocal.tar.gz -C /usr/local .; exit 0
+    && tar --ignore-failed-read --newer-mtime="$(cat ./started_at)" -zcvf usrlocal.tar.gz -C /usr/local .; echo $?; exit 0
 
 # Create a minimum viable runner for Production
 FROM ${BASE_IMAGE} as runner
 
 ARG GDAL_VERSION
+ARG SPATIALITE_VERSION
 
 USER root
 
@@ -88,6 +89,7 @@ COPY --from=builder /usrlocal.tar.gz /usrlocal.tar.gz
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends build-essential \
+    && apt-get install -y --no-install-recommends libsqlite3-mod-spatialite=${SPATIALITE_VERSION} \
     && tar -xvf /usrlocal.tar.gz -C /usr/local \
     && rm -f /usrlocal.tar.gz \
     && pip install --upgrade pip setuptools GDAL==${GDAL_VERSION} \
